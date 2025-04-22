@@ -152,12 +152,15 @@ for directory in "${results[@]}"; do
 		if [[ "$base_name" == "$FW" ]]; then		
 		    if [[ $(file "$directory") == *"directory"* ]]; then
 		        echo "$directory directoty found!"
-		        #rm -rf "$destination/Middlewares/Third_Party/FatFs"
-				destination="$directory/Middlewares/Third_Party/FatFs"
-				echo "Current FATFS will first be deleted from $destination"
-				rm -rf "$destination"				
-		        echo "Copying new FATFS files to $destination"		
-				cp -r $dir_to_copy $destination
+		        destination="$directory/Middlewares/Third_Party"
+		        if [[ "$destination/FatFs" == $dir_to_copy ]]; then
+		        	echo "Destination directory is the source directory so do not delete it! Moving on..."
+		        else
+		        	echo "Current FATFS will first be deleted from $destination if it exists"
+					rm -rf "$destination/FatFs"				
+		        	echo "Copying new FATFS files to $destination"		
+					cp -r $dir_to_copy $destination
+				fi
 		    else
 		        echo "$file is not a binary executable."
 		    fi
